@@ -52,7 +52,7 @@ callback function：定义了一个带有一个int参数的函数指针 callback
 #include "netinet/ip.h"
 #include "sys/ioctl.h"
 
-#endif
+#endif /*NS_PORT*/
 
 #include "syslog.h"
 #include "errno.h"
@@ -61,9 +61,9 @@ callback function：定义了一个带有一个int参数的函数指针 callback
 
 #ifndef NS_PORT
 
-#include "timer_queue.h"
+//#include "timer_queue.h"
 
-#endif
+#endif /*NS_PORT*/
 
 #ifdef NS_PORT
 #define NS_CLASS AODVUU::
@@ -78,7 +78,7 @@ callback function：定义了一个带有一个int参数的函数指针 callback
 #define NS_OUTSIDE_CLASS
 #define NS_STATIC static
 #define NS_INLINE inline
-#endif
+#endif /* NS_PORT */
 
 #define AODV_UU_VERSION "0.9"
 #define DRAFT_VERSION "rfc3561"
@@ -102,7 +102,7 @@ callback function：定义了一个带有一个int参数的函数指针 callback
 
 #if !defined(IFNAMSIZ)
 #define IFNAMSIZ 16
-#endif
+#endif /*!defined(IFNAMSIZ)*/
 
 
 /* Data for a network device */
@@ -111,7 +111,7 @@ struct dev_info {
     int sock;            /* AODV socket associated with this device */
 #ifdef CONFIG_GATEWAY
     int psock;			/* Socket to send buffered data packets. */
-#endif
+#endif /*CONFIG_GATEWAY*/
     unsigned int ifindex;
     char ifname[IFNAMSIZ];
     struct in_addr ipaddr;    /* The local IP address */
@@ -179,7 +179,7 @@ static inline int name2index(char *name) {
     return -1;
 }
 
-#endif
+#endif /*NS_PORT*/
 
 
 /* Two macros to simplify retriving of a dev_info struct. Either using
@@ -254,6 +254,6 @@ typedef void (*callback_func_t)(int);
 
 extern int attach_callback_func(int fd, callback_func_t func);
 
-#endif
+#endif /*NS_PORT*/
 
-#endif //AODV_ROUTE_DEFS_H
+#endif /*AODV_ROUTE_DEFS_H*/
