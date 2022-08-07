@@ -8,7 +8,7 @@
 
 #ifndef NS_NO_GLOBALS
 
-
+#include "endian_sell.h"
 #include "defs.h"
 #include "seek_list.h"
 #include "routing_table.h"
