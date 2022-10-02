@@ -10,9 +10,9 @@
 
 extern int h_errno;
 
-#include "locality.h"
-#include "defs.h"
-#include "debug.h"
+#include "route_locality.h"
+#include "route_defs.h"
+#include "route_debug.h"
 
 extern int gw_prefix;
 #endif

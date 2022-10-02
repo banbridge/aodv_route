@@ -14,7 +14,7 @@
 #define AODV_ROUTE_AODV_TIMEOUT_H
 
 #ifndef NS_NO_GLOBALS
-#include "defs.h"
+#include "route_defs.h"
 #endif				/* NS_NO_GLOBALS */
 
 #ifndef NS_NO_DECLARATIONS

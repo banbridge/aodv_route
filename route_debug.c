@@ -15,14 +15,14 @@
 #else
 
 #include <net/if.h>
-#include "aodv_rreq.h"
-#include "aodv_rrep.h"
-#include "aodv_rerr.h"
-#include "defs.h"
-#include "debug.h"
-#include "params.h"
-#include "timer_queue.h"
-#include "routing_table.h"
+#include "route_rreq.h"
+#include "route_rrep.h"
+#include "route_rerr.h"
+#include "route_defs.h"
+#include "route_debug.h"
+#include "route_params.h"
+#include "route_timer_queue.h"
+#include "route_routing_table.h"
 
 #endif
 

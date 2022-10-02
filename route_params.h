@@ -5,7 +5,7 @@
 #ifndef AODV_ROUTE_PARAMS_H
 #define AODV_ROUTE_PARAMS_H
 
-#include "defs.h"
+#include "route_defs.h"
 
 #define K                       5
 

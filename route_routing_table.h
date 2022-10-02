@@ -7,26 +7,26 @@
 
 
 #ifndef NS_NO_GLOBALS
-#include "defs.h"
-#include "list.h"
+#include "route_defs.h"
+#include "route_list.h"
 
-typedef struct rt_table rt_table_t;
+typedef struct RtTable RtTableT;
 
 /* Neighbor struct for active routes in Route Table */
-typedef struct precursor {
+typedef struct Precursor {
     list_t l;
     struct in_addr neighbor;
-} precursor_t;
+} PrecursorT;
 
-#define FIRST_PREC(h) ((precursor_t *)((h).next))
+#define FIRST_PREC(h) ((PrecursorT *)((h).next))
 
-#define seqno_incr(s) ((s == 0) ? 0 : ((s == 0xFFFFFFFF) ? s = 1 : s++))
+#define SeqnoIncr(s) ((s == 0) ? 0 : ((s == 0xFFFFFFFF) ? s = 1 : s++))
 
 typedef u_int32_t hash_value;	/* A hash value */
 
 /* Route table entries */
-struct rt_table {
-    list_t l;
+struct RtTable {
+    ListT l;
     struct in_addr dest_addr;	/* IP address of the destination */
     u_int32_t dest_seqno;
     unsigned int ifindex;	/* Network interface index... */
@@ -41,7 +41,7 @@ struct rt_table {
     u_int8_t hello_cnt;
     hash_value hash;
     int nprec;			/* Number of precursors */
-    list_t precursors;		/* List of neighbors using the route */
+    ListT precursors;		/* List of neighbors using the route */
 };
 
 
@@ -61,38 +61,38 @@ struct rt_table {
 #define RT_TABLESIZE 64		/* Must be a power of 2 */
 #define RT_TABLEMASK (RT_TABLESIZE - 1)
 
-struct routing_table {
+struct RoutingTable {
     unsigned int num_entries;
     unsigned int num_active;
-    list_t tbl[RT_TABLESIZE];
+    ListT tbl[RT_TABLESIZE];
 };
 
-void precursor_list_destroy(rt_table_t * rt);
+void PrecursorListDestroy(RtTableT * rt);
 #endif				/* NS_NO_GLOBALS */
 
 #ifndef NS_NO_DECLARATIONS
 
-struct routing_table rt_tbl;
+struct RtTable rt_tbl;
 
-void rt_table_init();
-void rt_table_destroy();
-rt_table_t *rt_table_insert(struct in_addr dest, struct in_addr next,
+void RtTableInit();
+void RtTableDestroy();
+rt_table_t *RtTableInsert(struct in_addr dest, struct in_addr next,
                             u_int8_t hops, u_int32_t seqno, u_int32_t life,
                             u_int8_t state, u_int16_t flags,
                             unsigned int ifindex);
-rt_table_t *rt_table_update(rt_table_t * rt, struct in_addr next, u_int8_t hops,
+rt_table_t *RtTableUpdate(RtTableT * rt, struct in_addr next, u_int8_t hops,
                             u_int32_t seqno, u_int32_t lifetime, u_int8_t state,
                             u_int16_t flags);
-NS_INLINE rt_table_t *rt_table_update_timeout(rt_table_t * rt,
+NS_INLINE rt_table_t *RtTableUpdateTimeout(RtTableT * rt,
                                               u_int32_t lifetime);
-void rt_table_update_route_timeouts(rt_table_t * fwd_rt, rt_table_t * rev_rt);
-rt_table_t *rt_table_find(struct in_addr dest);
-rt_table_t *rt_table_find_gateway();
-int rt_table_update_inet_rt(rt_table_t * gw, u_int32_t life);
-int rt_table_invalidate(rt_table_t * rt);
-void rt_table_delete(rt_table_t * rt);
-void precursor_add(rt_table_t * rt, struct in_addr addr);
-void precursor_remove(rt_table_t * rt, struct in_addr addr);
+void RtTableUpdateRouteTimeouts(RtTableT * fwd_rt, RtTableT * rev_rt);
+RtTableT *RtTableFind(struct in_addr dest);
+RtTableT *RtTableFindGateway();
+int RtTableUpdateInetRt(RtTableT * gw, u_int32_t life);
+int RtTableInvalidate(RtTableT * rt);
+void RtTableDelete(RtTableT * rt);
+void PrecursorAdd(RtTableT * rt, struct in_addr addr);
+void PrecursorRemove(RtTableT * rt, struct in_addr addr);
 
 #endif				/* NS_NO_DECLARATIONS */
 

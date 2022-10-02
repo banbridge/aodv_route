@@ -3,4 +3,4 @@ project(aodv_route C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(aodv_route main.c defs.h list.h list.c params.h timer_queue.h timer_queue.c debug.h debug.c seek_list.c seek_list.h aodv_timeout.c aodv_timeout.h aodv_hello.c aodv_hello.h aodv_neighbor.c aodv_neighbor.h aodv_rerr.c aodv_rerr.h aodv_rrep.c aodv_rrep.h aodv_rreq.c aodv_rreq.h aodv_socket.c aodv_socket.h routing_table.c routing_table.h endian_sell.h locality.c locality.h)
+add_executable(aodv_route main.c route_defs.h route_list.h route_list.c route_params.h route_timer_queue.h route_timer_queue.c route_debug.h route_debug.c route_seek_list.c route_seek_list.h route_timeout.c route_timeout.h route_hello.c route_hello.h route_neighbor.c route_neighbor.h route_rerr.c route_rerr.h route_rrep.c route_rrep.h route_rreq.c route_rreq.h route_socket.c route_socket.h route_routing_table.c route_routing_table.h route_endian.h route_locality.c route_locality.h)

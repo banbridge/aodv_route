@@ -7,10 +7,10 @@
 
 
 #ifndef NS_NO_GLOBALS
-#include "endian_sell.h"
+#include "route_endian.h"
 
-#include "defs.h"
-#include "routing_table.h"
+#include "route_defs.h"
+#include "route_routing_table.h"
 
 /* RERR Flags: */
 #define RERR_NODELETE 0x1
@@ -49,13 +49,13 @@ typedef struct {
 #define RERR_UDEST_NEXT(udest) ((RERR_udest *)((char *)udest + RERR_UDEST_SIZE))
 #endif				/* NS_NO_GLOBALS */
 
-#ifndef NS_NO_DECLARATIONS
-RERR *rerr_create(u_int8_t flags, struct in_addr dest_addr,
+
+RERR *RerrCreate(u_int8_t flags, struct in_addr dest_addr,
                   u_int32_t dest_seqno);
-void rerr_add_udest(RERR * rerr, struct in_addr udest, u_int32_t udest_seqno);
-void rerr_process(RERR * rerr, int rerrlen, struct in_addr ip_src,
+void RerrAddUdest(RERR * rerr, struct in_addr udest, u_int32_t udest_seqno);
+void RerrProcess(RERR * rerr, int rerrlen, struct in_addr ip_src,
                   struct in_addr ip_dst);
-#endif				/* NS_NO_DECLARATIONS */
+
 
 
 #endif //AODV_ROUTE_AODV_RERR_H

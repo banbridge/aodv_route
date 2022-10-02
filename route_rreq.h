@@ -6,12 +6,11 @@
 #define AODV_ROUTE_AODV_RREQ_H
 
 
-#ifndef NS_NO_GLOBALS
 
-#include "endian_sell.h"
-#include "defs.h"
-#include "seek_list.h"
-#include "routing_table.h"
+#include "route_endian.h"
+#include "route_defs.h"
+#include "route_seek_list.h"
+#include "route_routing_table.h"
 
 /* RREQ Flags: */
 #define RREQ_JOIN          0x1
@@ -50,44 +49,35 @@ typedef struct {
 
 /* A data structure to buffer information about received RREQ's */
 struct rreq_record {
-    list_t l;
+    ListT l;
     struct in_addr orig_addr;	/* Source of the RREQ */
     u_int32_t rreq_id;		/* RREQ's broadcast ID */
     struct timer rec_timer;
 };
 
 struct blacklist {
-    list_t l;
+    ListT l;
     struct in_addr dest_addr;
     struct timer bl_timer;
 };
-#endif				/* NS_NO_GLOBALS */
 
-#ifndef NS_NO_DECLARATIONS
-RREQ *rreq_create(u_int8_t flags, struct in_addr dest_addr,
+
+
+RREQ *RreqCreate(u_int8_t flags, struct in_addr dest_addr,
                   u_int32_t dest_seqno, struct in_addr orig_addr);
-void rreq_send(struct in_addr dest_addr, u_int32_t dest_seqno, int ttl,
+void RreqSend(struct in_addr dest_addr, u_int32_t dest_seqno, int ttl,
                u_int8_t flags);
-void rreq_forward(RREQ * rreq, int size, int ttl);
-void rreq_process(RREQ * rreq, int rreqlen, struct in_addr ip_src,
+void RreqForward(RREQ * rreq, int size, int ttl);
+void RreqProcess(RREQ * rreq, int rreqlen, struct in_addr ip_src,
                   struct in_addr ip_dst, int ip_ttl, unsigned int ifindex);
-void rreq_route_discovery(struct in_addr dest_addr, u_int8_t flags,
+void RreqRouteDiscovery(struct in_addr dest_addr, u_int8_t flags,
                           struct ip_data *ipd);
-void rreq_record_timeout(void *arg);
-struct blacklist *rreq_blacklist_insert(struct in_addr dest_addr);
-void rreq_blacklist_timeout(void *arg);
-void rreq_local_repair(rt_table_t * rt, struct in_addr src_addr,
+void RreqRecordTimeout(void *arg);
+struct blacklist *RreqBlacklistInsert(struct in_addr dest_addr);
+void RreqBlacklistTimeout(void *arg);
+void RreqLocalRepair(rt_table_t * rt, struct in_addr src_addr,
                        struct ip_data *ipd);
 
-#ifdef NS_PORT
-struct rreq_record *rreq_record_insert(struct in_addr orig_addr,
-				       u_int32_t rreq_id);
-struct rreq_record *rreq_record_find(struct in_addr orig_addr,
-				     u_int32_t rreq_id);
-struct blacklist *rreq_blacklist_find(struct in_addr dest_addr);
-#endif				/* NS_PORT */
-
-#endif				/* NS_NO_DECLARATIONS */
 
 
 #endif //AODV_ROUTE_AODV_RREQ_H

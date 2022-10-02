@@ -10,7 +10,7 @@
 // Created by ByteDance on 2022/7/27.
 //
 
-#include "seek_list.h"
+#include "route_seek_list.h"
 
 #include "stdlib.h"
 
@@ -18,13 +18,13 @@
 #include "ns-2/aodv-uu.h"
 #include "list.h"
 #else
-#include "seek_list.h"
-#include "timer_queue.h"
-#include "aodv_timeout.h"
-#include "defs.h"
-#include "params.h"
-#include "debug.h"
-#include "list.h"
+#include "route_seek_list.h"
+#include "route_timer_queue.h"
+#include "route_timeout.h"
+#include "route_defs.h"
+#include "route_params.h"
+#include "route_debug.h"
+#include "route_list.h"
 #endif
 
 #ifndef NS_PORT
@@ -37,14 +37,14 @@ static LIST(seekhead);
 void seek_list_print();
 #endif
 
-seek_list_t *NS_CLASS seek_list_insert(struct in_addr dest_addr,
+SeekListT *NS_CLASS SeekListInsert(struct in_addr dest_addr,
                            u_int32_t dest_seqno,
                            int ttl, u_int8_t flags,
-                           struct ip_data *ipd ){
-    
-    seek_list_t *entry;
+                           struct IpData *ipd ){
 
-    if ((entry = (seek_list_t *) malloc(sizeof(seek_list_t))) == NULL) {
+    SeekListT *entry;
+
+    if ((entry = (SeekListT *) malloc(sizeof(SeekListT))) == NULL) {
 	fprintf(stderr, "Failed malloc\n");
 	exit(-1);
     }
@@ -56,23 +56,23 @@ seek_list_t *NS_CLASS seek_list_insert(struct in_addr dest_addr,
     entry->ttl = ttl;
     entry->ipd = ipd;
 
-    timer_init(&entry->seek_timer, &NS_CLASS route_discovery_timeout, entry);
+    TimerInit(&entry->seek_timer, &NS_CLASS route_discovery_timeout, entry);
 
-    list_add(&seekhead, &entry->l);
+    ListAdd(&seekhead, &entry->l);
 #ifdef SEEK_LIST_DEBUG
     seek_list_print();
 #endif
     return entry;
  }
 
-int NS_CLASS seek_list_remove(seek_list_t * entry){
+int NS_CLASS SeekListRemove(seek_list_t * entry){
     if (!entry)
 	return 0;
 
-    list_detach(&entry->l);
+    ListDetach(&entry->l);
 
     /* Make sure any timers are removed */
-    timer_remove(&entry->seek_timer);
+    TimerRemove(&entry->seek_timer);
 
     if (entry->ipd)
 	free(entry->ipd);
@@ -81,11 +81,11 @@ int NS_CLASS seek_list_remove(seek_list_t * entry){
     return 1;
 }
 
-seek_list_t *NS_CLASS seek_list_find(struct in_addr dest_addr){
-    list_t *pos;
+SeekListT *NS_CLASS SeekListFind(struct in_addr dest_addr){
+    ListT *pos;
 
-    list_foreach(pos, &seekhead) {
-	seek_list_t *entry = (seek_list_t *) pos;
+    ListForeach(pos, &seekhead) {
+        SeekListT *entry = (SeekListT *) pos;
 
 	if (entry->dest_addr.s_addr == dest_addr.s_addr)
 	    return entry;
