@@ -9,12 +9,13 @@
 #ifndef NS_NO_GLOBALS
 #include "route_defs.h"
 #include "route_list.h"
+#include "route_timer_queue.h"
 
 typedef struct RtTable RtTableT;
 
 /* Neighbor struct for active routes in Route Table */
 typedef struct Precursor {
-    list_t l;
+    ListT l;
     struct in_addr neighbor;
 } PrecursorT;
 
@@ -34,9 +35,9 @@ struct RtTable {
     u_int8_t hcnt;		/* Distance (in hops) to the destination */
     u_int16_t flags;		/* Routing flags */
     u_int8_t state;		/* The state of this entry */
-    struct timer rt_timer;	/* The timer associated with this entry */
-    struct timer ack_timer;	/* RREP_ack timer for this destination */
-    struct timer hello_timer;
+    struct Timer rt_timer;	/* The timer associated with this entry */
+    struct Timer ack_timer;	/* RREP_ack timer for this destination */
+    struct Timer hello_timer;
     struct timeval last_hello_time;
     u_int8_t hello_cnt;
     hash_value hash;
@@ -76,14 +77,14 @@ struct RtTable rt_tbl;
 
 void RtTableInit();
 void RtTableDestroy();
-rt_table_t *RtTableInsert(struct in_addr dest, struct in_addr next,
+RtTableT *RtTableInsert(struct in_addr dest, struct in_addr next,
                             u_int8_t hops, u_int32_t seqno, u_int32_t life,
                             u_int8_t state, u_int16_t flags,
                             unsigned int ifindex);
-rt_table_t *RtTableUpdate(RtTableT * rt, struct in_addr next, u_int8_t hops,
+RtTableT *RtTableUpdate(RtTableT * rt, struct in_addr next, u_int8_t hops,
                             u_int32_t seqno, u_int32_t lifetime, u_int8_t state,
                             u_int16_t flags);
-NS_INLINE rt_table_t *RtTableUpdateTimeout(RtTableT * rt,
+NS_INLINE RtTableT *RtTableUpdateTimeout(RtTableT * rt,
                                               u_int32_t lifetime);
 void RtTableUpdateRouteTimeouts(RtTableT * fwd_rt, RtTableT * rev_rt);
 RtTableT *RtTableFind(struct in_addr dest);

@@ -11,6 +11,7 @@
 #include "route_defs.h"
 #include "route_seek_list.h"
 #include "route_routing_table.h"
+#include "route_timer_queue.h"
 
 /* RREQ Flags: */
 #define RREQ_JOIN          0x1
@@ -52,13 +53,13 @@ struct rreq_record {
     ListT l;
     struct in_addr orig_addr;	/* Source of the RREQ */
     u_int32_t rreq_id;		/* RREQ's broadcast ID */
-    struct timer rec_timer;
+    struct Timer rec_timer;
 };
 
 struct blacklist {
     ListT l;
     struct in_addr dest_addr;
-    struct timer bl_timer;
+    struct Timer bl_timer;
 };
 
 
@@ -71,12 +72,12 @@ void RreqForward(RREQ * rreq, int size, int ttl);
 void RreqProcess(RREQ * rreq, int rreqlen, struct in_addr ip_src,
                   struct in_addr ip_dst, int ip_ttl, unsigned int ifindex);
 void RreqRouteDiscovery(struct in_addr dest_addr, u_int8_t flags,
-                          struct ip_data *ipd);
+                          struct IpData *ipd);
 void RreqRecordTimeout(void *arg);
 struct blacklist *RreqBlacklistInsert(struct in_addr dest_addr);
 void RreqBlacklistTimeout(void *arg);
-void RreqLocalRepair(rt_table_t * rt, struct in_addr src_addr,
-                       struct ip_data *ipd);
+void RreqLocalRepair(RtTableT * rt, struct in_addr src_addr,
+                       struct IpData *ipd);
 
 
 

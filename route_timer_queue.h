@@ -24,7 +24,7 @@ typedef void (*timeout_func_t) (void *);
 
 
 struct Timer{
-    list_t l; //链表域
+    ListT l; //链表域
     int used; //主要是用来记录该timer是否已经进入队列，当我们在添加一个timer的时候，如果它已经进入了队列，首先要把它删除，然后再添加
     struct timeval timeout; //记录时间的 timeval 变量
     timeout_func_t handler; //记录时间到了的时候调用的处理函数指针（类型为 timeout_func_t）

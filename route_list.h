@@ -28,11 +28,11 @@ int ListAddTail(ListT * head, ListT * le);
 int ListAdd(ListT * head, ListT * le);
 
 #define ListForeach(curr, head) \
-        for (curr = (head)->next; curr != (head); curr = curr->next)
+        for ((curr) = (head)->next; (curr) != (head); (curr) = (curr)->next)
 
 #define ListForeachSafe(pos, tmp, head) \
-        for (pos = (head)->next, tmp = pos->next; pos != (head); \
-                pos = tmp, tmp = pos->next)
+        for ((pos) = (head)->next, (tmp) = (pos)->next; (pos) != (head); \
+                (pos) = (tmp), (tmp) = (pos)->next)
 
 #define ListEmpty(head) ((head) == (head)->next)
 

@@ -48,14 +48,14 @@ typedef struct SeekList{
     u_int8_t flags;		/* The flags we are using for resending the RREQ */
     int reqs;
     int ttl;
-    struct timer seek_timer;
+    struct Timer seek_timer;
 }SeekListT;
 
 #endif /* NS_NO_GLOBALS */
 
 #ifndef NS_NO_DECLARATIONS
-seek_list_t *SeekListInsert(struct in_addr dest_addr, u_int32_t dest_seqno,
-			      int ttl, u_int8_t flags, struct ip_data *ipd);
+SeekListT *SeekListInsert(struct in_addr dest_addr, u_int32_t dest_seqno,
+			      int ttl, u_int8_t flags, struct IpData *ipd);
 int SeekListRemove(SeekListT * entry);
 SeekListT *seek_list_find(struct in_addr dest_addr);
 

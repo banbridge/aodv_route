@@ -65,7 +65,7 @@ SeekListT *NS_CLASS SeekListInsert(struct in_addr dest_addr,
     return entry;
  }
 
-int NS_CLASS SeekListRemove(seek_list_t * entry){
+int NS_CLASS SeekListRemove(SeekListT * entry){
     if (!entry)
 	return 0;
 

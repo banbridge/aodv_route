@@ -33,7 +33,7 @@ int log_file_fd = -1;
 int log_rt_fd = -1;
 int log_nmsgs = 0;
 int debug = 0;
-struct timer rt_log_timer;
+struct Timer rt_log_timer;
 #endif
 
 void NS_CLASS log_init() {
@@ -73,8 +73,8 @@ void NS_CLASS log_init() {
 }
 
 void NS_CLASS log_rt_table_init() {
-    timer_init(&rt_log_timer, &NS_CLASS print_rt_table, NULL);
-    timer_set_timeout(&rt_log_timer, rt_log_interval);
+    TimerInit(&rt_log_timer, &NS_CLASS print_rt_table, NULL);
+    TimerSetTimeout(&rt_log_timer, rt_log_interval);
 }
 
 void NS_CLASS log_cleanup() {
@@ -155,7 +155,7 @@ void NS_CLASS alog(int type, int errnum, const char *function, char *format,
     /*   if (type <= LOG_NOTICE) */
 /* 	len += sprintf(log_buf + len, "%s: ", progname); */
 
-    len += sprintf(log_buf + len, "%02d:%02d:%02d.%03ld %s: %s", time->tm_hour,
+    len += sprintf(log_buf + len, "%02d:%02d:%02d.%03d %s: %s", time->tm_hour,
                    time->tm_min, time->tm_sec, now.tv_usec / 1000, function,
                    msg);
 
@@ -345,9 +345,9 @@ void NS_CLASS print_rt_table(void *arg) {
     len = 0;
 
     for (i = 0; i < RT_TABLESIZE; i++) {
-        list_t *pos;
-        list_foreach(pos, &rt_tbl.tbl[i]) {
-            rt_table_t *rt = (rt_table_t *) pos;
+        ListT *pos;
+        ListForeach(pos, &rt_tbl.tbl[i]) {
+            RtTableT *rt = (RtTableT *) pos;
 
             if (rt->dest_seqno == 0)
                 sprintf(seqno_str, "-");
@@ -355,34 +355,34 @@ void NS_CLASS print_rt_table(void *arg) {
                 sprintf(seqno_str, "%u", rt->dest_seqno);
 
             /* Print routing table entries one by one... */
-            if (list_empty(&rt->precursors))
+            if (ListEmpty(&rt->precursors))
                 len += sprintf(rt_buf + len,
                                "%-15s %-15s %-3d %-3s %-5s %-6lu %-5s %-5s\n",
                                ip_to_str(rt->dest_addr),
                                ip_to_str(rt->next_hop), rt->hcnt,
                                state_to_str(rt->state), seqno_str,
                                (rt->hcnt == 255) ? 0 :
-                               timeval_diff(&rt->rt_timer.timeout, &now),
+                               TimevalDiff(&rt->rt_timer.timeout, &now),
                                rt_flags_to_str(rt->flags),
                                if_indextoname(rt->ifindex, ifname));
 
             else {
-                list_t *pos2;
+                ListT *pos2;
                 len += sprintf(rt_buf + len,
                                "%-15s %-15s %-3d %-3s %-5s %-6lu %-5s %-5s %-15s\n",
                                ip_to_str(rt->dest_addr),
                                ip_to_str(rt->next_hop), rt->hcnt,
                                state_to_str(rt->state), seqno_str,
                                (rt->hcnt == 255) ? 0 :
-                               timeval_diff(&rt->rt_timer.timeout, &now),
+                               TimevalDiff(&rt->rt_timer.timeout, &now),
                                rt_flags_to_str(rt->flags),
                                if_indextoname(rt->ifindex, ifname),
-                               ip_to_str(((precursor_t *) rt->precursors.next)->
+                               ip_to_str(((PrecursorT *) rt->precursors.next)->
                                        neighbor));
 
                 /* Print all precursors for the current routing entry */
-                list_foreach(pos2, &rt->precursors) {
-                    precursor_t *pr = (precursor_t *) pos2;
+                ListForeach(pos2, &rt->precursors) {
+                    PrecursorT *pr = (PrecursorT *) pos2;
 
                     /* Skip first entry since it is already printed */
                     if (pos2->prev == &rt->precursors)
@@ -408,7 +408,7 @@ void NS_CLASS print_rt_table(void *arg) {
     }
     /* Schedule a new printing of routing table... */
     schedule:
-    timer_set_timeout(&rt_log_timer, rt_log_interval);
+    TimerSetTimeout(&rt_log_timer, rt_log_interval);
 }
 
 /* This function lets you print more than one IP address at the same time */

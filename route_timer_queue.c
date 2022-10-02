@@ -40,7 +40,7 @@ int NS_CLASS TimerInit(struct Timer *t, timeout_func_t f, void *data) {
  */
 void NS_CLASS TimerTimeout(struct timeval *now) {
     LIST(expTQ);
-    list_t *pos, *tmp;
+    ListT *pos, *tmp;
 
 #ifdef DEBUG_TIMER_QUEUE
     printf("\n######## timer_timeout: called!!\n");
@@ -80,7 +80,7 @@ void NS_CLASS TimerTimeout(struct timeval *now) {
  * @param t
  */
 NS_STATIC void NS_CLASS TimerAdd(struct Timer *t) {
-    list_t *pos;
+    ListT *pos;
 
     /* Sanity checks: */
     if (!t) {
